@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-public class Door : MonoBehaviour
+public class WinSpot : MonoBehaviour
 {
 
     #region BasicFunctions
@@ -12,11 +12,7 @@ public class Door : MonoBehaviour
     {
         if (c.transform.gameObject.CompareTag("Player"))
         {
-            if (c.transform.GetComponent<Player>().HasKey())
-            {
-                c.transform.GetComponent<Player>().GotWin();
-                Destroy(this.gameObject);
-            }
+            SceneManager.LoadScene("WinScene");
         }
     }
     #endregion

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -23,8 +24,12 @@ public class Player : MonoBehaviour
     private GameObject lightRing;
     #endregion
 
-    #region KeyVariables
+    #region KeyVariable
     private bool hasKey;
+    #endregion
+
+    #region WinVariables
+    private bool hasWon;
     #endregion
 
     #region HealthVariables
@@ -45,11 +50,17 @@ public class Player : MonoBehaviour
         lightCollider = lightRing.GetComponent<CircleCollider2D>();
 
         hasKey = false;
+        hasWon = false;
     }
 
     // Update is called once per frame
     public void Update()
     {
+        if (hasWon)
+        {
+            SceneManager.LoadScene("WinScene");
+        }
+
         xMove = Input.GetAxisRaw("Horizontal");
         yMove = Input.GetAxisRaw("Vertical");
 
@@ -87,6 +98,13 @@ public class Player : MonoBehaviour
     public bool HasKey()
     {
         return hasKey;
+    }
+    #endregion
+
+    #region WinFunctions
+    public void GotWin()
+    {
+        hasWon = true;
     }
     #endregion
 
