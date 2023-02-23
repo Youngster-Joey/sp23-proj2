@@ -4,15 +4,71 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    #region Components
+    private Rigidbody2D rb;
+    private SpriteRenderer sr;
+    private CircleCollider2D cc;
+    private Animator animator;
+    #endregion
+
+    #region MovementVariables
+    private float xMove;
+    private float yMove;
+    public float movespeed;
+    #endregion
+
+    #region LightVariables
+    private float lightRadius;
+    private CircleCollider2D lightCollider;
+    private GameObject lightRing;
+    #endregion
+
     // Start is called before the first frame update
-    void Start()
-    {
-        
+    public void Start()
+    {   
+        rb = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
+        cc = GetComponent<CircleCollider2D>();
+        animator = GetComponent<Animator>();
+
+        lightRadius = 1.5f;
+        lightRing = transform.Find("Light").gameObject;
+        lightCollider = lightRing.GetComponent<CircleCollider2D>();
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
+        xMove = Input.GetAxisRaw("Horizontal");
+        yMove = Input.GetAxisRaw("Vertical");
+
+        Vector2 movementVector = new Vector2(xMove, yMove).normalized;
+        movementVector = movementVector * movespeed;
+        rb.velocity = movementVector;
+
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            ChangeLight(0.5f);
+        }
         
+    }
+
+    public void ChangeLight(float amount) {
+        lightRadius += amount;
+
+        lightRing.transform.localScale = new Vector3(lightRadius, lightRadius, 1);
+
+        // lightCollider.radius = lightRadius / 2;
+
+        if (lightRadius < 0) {
+            Die();
+        }
+    }
+
+    public void Die() {
+        Destroy(this.gameObject);
+    }
+
+    public void aggroPlayer(GameObject enemy) {
+        Debug.Log("PRAISE THE SUN");
     }
 }
