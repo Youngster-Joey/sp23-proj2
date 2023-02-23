@@ -23,6 +23,10 @@ public class Player : MonoBehaviour
     private GameObject lightRing;
     #endregion
 
+    #region KeyVariables
+    private bool hasKey;
+    #endregion
+
     #region HealthVariables
     public int health;
     #endregion
@@ -39,6 +43,8 @@ public class Player : MonoBehaviour
         lightRadius = 1.5f;
         lightRing = transform.Find("Light").gameObject;
         lightCollider = lightRing.GetComponent<CircleCollider2D>();
+
+        hasKey = false;
     }
 
     // Update is called once per frame
@@ -71,6 +77,19 @@ public class Player : MonoBehaviour
         }
     }
     #endregion
+
+    #region KeyFunctions
+    public void GotKey()
+    {
+        hasKey = true;
+    }
+
+    public bool HasKey()
+    {
+        return hasKey;
+    }
+    #endregion
+
 
     #region HealthFunctions
     public void TakeDamage(int amount) {
