@@ -23,6 +23,11 @@ public class Player : MonoBehaviour
     private GameObject lightRing;
     #endregion
 
+    #region HealthVariables
+    public int health;
+    #endregion
+
+    #region UnityFunctions
     // Start is called before the first frame update
     public void Start()
     {   
@@ -51,7 +56,9 @@ public class Player : MonoBehaviour
         }
         
     }
+    #endregion
 
+    #region LightFunctions
     public void ChangeLight(float amount) {
         lightRadius += amount;
 
@@ -60,6 +67,15 @@ public class Player : MonoBehaviour
         // lightCollider.radius = lightRadius / 2;
 
         if (lightRadius < 0) {
+            lightRadius = 0.5f;
+        }
+    }
+    #endregion
+
+    #region HealthFunctions
+    public void TakeDamage(int amount) {
+        health -= amount;
+        if (health <= 0) {
             Die();
         }
     }
@@ -67,8 +83,5 @@ public class Player : MonoBehaviour
     public void Die() {
         Destroy(this.gameObject);
     }
-
-    public void aggroPlayer(GameObject enemy) {
-        Debug.Log("PRAISE THE SUN");
-    }
+    #endregion
 }
