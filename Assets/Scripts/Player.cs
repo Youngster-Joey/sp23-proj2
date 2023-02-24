@@ -61,6 +61,14 @@ public class Player : MonoBehaviour
             SceneManager.LoadScene("WinScene");
         }
 
+        if (lightRadius < 0.5f)
+        {
+           Shade.DetectedPlayer();
+        } else
+        {
+           Shade.NotDetectedPlayer();
+        }
+
         xMove = Input.GetAxisRaw("Horizontal");
         yMove = Input.GetAxisRaw("Vertical");
 
@@ -118,7 +126,7 @@ public class Player : MonoBehaviour
     }
 
     public void Die() {
-        Destroy(this.gameObject);
+        SceneManager.LoadScene("LoseScene");
     }
     #endregion
 }

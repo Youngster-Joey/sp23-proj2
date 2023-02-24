@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Wisp
   - Shade
+  - Light
   layers:
   - Default
   - TransparentFX
