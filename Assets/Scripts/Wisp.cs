@@ -5,7 +5,7 @@ using UnityEngine;
 using Random=UnityEngine.Random;
 
 
-public class Wisp : MonoBehaviour
+public class Shade : MonoBehaviour
 {
      #region Movement_variables
     public float movespeed;
@@ -15,7 +15,7 @@ public class Wisp : MonoBehaviour
     #endregion
 
     #region Physics_components
-    Rigidbody2D EnemyRB;
+    Rigidbody2D WispRB;
     #endregion
 
     #region Targeting_variables
@@ -29,21 +29,33 @@ public class Wisp : MonoBehaviour
 
     #region Random_variables
     public float latestDirChangeTime;
-    public float DirChangeTime = 2f;
+    public float dirChangeTime = 2f;
     
     #endregion
 
     void Awake() {
         latestDirChangeTime = 0f;
         lifeLength = Random.Range(2.0f, 9.0f);
+        playerDetected = false;
 
     }
 
     void Update() {
+        
         if (playerDetected) {
+            Debug.Log("RegMove");
             RegMove();
         }
-        RandMove();
+        else {
+            if (Time.time - latestDirChangeTime > dirChangeTime){
+                Debug.Log("time shift thing");
+                latestDirChangeTime = Time.time;
+                newMoveVector();
+        }
+            Debug.Log("RandMove");
+            RandMove();
+        }
+        
     }
 
 
@@ -54,10 +66,12 @@ public class Wisp : MonoBehaviour
     }
     
     private void RandMove() {
-
+        transform.position = new Vector2(transform.position.x + (movementPerSecond.x * Time.deltaTime), 
+        transform.position.y + (movementPerSecond.y * Time.deltaTime));
     }
 
     private void RegMove() {
-
+        Vector2 movementDirection = player.position - transform.position;
+        WispRB.velocity = movementDirection.normalized * movespeed;
     }
 }
