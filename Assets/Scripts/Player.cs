@@ -19,7 +19,8 @@ public class Player : MonoBehaviour
     #endregion
 
     #region LightVariables
-    private float lightRadius;
+    public float lightRadius;
+    public float lightDecay;
     private CircleCollider2D lightCollider;
     private GameObject lightRing;
     #endregion
@@ -45,7 +46,6 @@ public class Player : MonoBehaviour
         cc = GetComponent<CircleCollider2D>();
         animator = GetComponent<Animator>();
 
-        lightRadius = 1.5f;
         lightRing = transform.Find("Light").gameObject;
         lightCollider = lightRing.GetComponent<CircleCollider2D>();
 
@@ -61,14 +61,6 @@ public class Player : MonoBehaviour
             SceneManager.LoadScene("WinScene");
         }
 
-        if (lightRadius < 0.5f)
-        {
-           Shade.DetectedPlayer();
-        } else
-        {
-           Shade.NotDetectedPlayer();
-        }
-
         xMove = Input.GetAxisRaw("Horizontal");
         yMove = Input.GetAxisRaw("Vertical");
 
@@ -79,7 +71,8 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) {
             ChangeLight(0.5f);
         }
-        
+
+        this.ChangeLight(-lightDecay * Time.deltaTime);
     }
     #endregion
 
@@ -91,7 +84,7 @@ public class Player : MonoBehaviour
 
         // lightCollider.radius = lightRadius / 2;
 
-        if (lightRadius < 0) {
+        if (lightRadius < 0.5f) {
             lightRadius = 0.5f;
         }
     }
