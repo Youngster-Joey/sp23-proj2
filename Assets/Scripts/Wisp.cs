@@ -7,7 +7,7 @@ using Random=UnityEngine.Random;
 
 public class Wisp : MonoBehaviour
 {
-     #region Movement_variables
+    #region Movement_variables
     public float movespeed;
     private Vector2 movementDirection;
     private Vector2 movementPerSecond;
@@ -19,7 +19,7 @@ public class Wisp : MonoBehaviour
     #endregion
 
     #region Targeting_variables
-    public Transform player;
+    private Transform player;
     #endregion
 
     #region Light_variables
@@ -30,14 +30,19 @@ public class Wisp : MonoBehaviour
     #region Random_variables
     public float latestDirChangeTime;
     public float dirChangeTime = 2f;
-    
     #endregion
 
-    void Awake() {
+
+    void Start() {
+        movespeed = movespeed * Random.Range(1f, 2f);
+        player = GameObject.Find("Player").transform;
+        Debug.Log(player);
+
         latestDirChangeTime = 0f;
         lifeLength = Random.Range(2.0f, 9.0f);
         playerDetected = false;
 
+        WispRB = GetComponent<Rigidbody2D>();
     }
 
     void Update() {
@@ -46,13 +51,14 @@ public class Wisp : MonoBehaviour
             Debug.Log("RegMove");
             RegMove();
         }
+        
         else {
             if (Time.time - latestDirChangeTime > dirChangeTime){
                 Debug.Log("time shift thing");
                 latestDirChangeTime = Time.time;
                 newMoveVector();
         }
-            Debug.Log("RandMove");
+            // Debug.Log("RandMove");
             RandMove();
         }
         
@@ -71,19 +77,25 @@ public class Wisp : MonoBehaviour
     }
 
     private void RegMove() {
+        Debug.Log(player.position);
         Vector2 movementDirection = player.position - transform.position;
         WispRB.velocity = movementDirection.normalized * movespeed;
     }
 
     #region CollisionFunctions
-    private void OnCollisionEnter2D(Collision2D c)
+    private void OnTriggerEnter2D(Collider2D c)
     {
-        if (c.collider.gameObject.CompareTag("Light"))
+        Debug.Log("yo");
+        if (c.gameObject.CompareTag("Light"))
         {
+            Debug.Log("YO");
             playerDetected = true;
         }
 
-        if (c.collider.gameObject.CompareTag("Player"))
+    }
+
+    private void OnCollisionEnter2D(Collision2D c) {
+        if (c.transform.CompareTag("Player"))
         {
             c.transform.GetComponent<Player>().ChangeLight(-stealAmount);
         }

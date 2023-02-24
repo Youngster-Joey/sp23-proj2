@@ -61,14 +61,6 @@ public class Player : MonoBehaviour
             SceneManager.LoadScene("WinScene");
         }
 
-        if (lightRadius < 0.5f)
-        {
-           Shade.DetectedPlayer();
-        } else
-        {
-           Shade.NotDetectedPlayer();
-        }
-
         xMove = Input.GetAxisRaw("Horizontal");
         yMove = Input.GetAxisRaw("Vertical");
 
@@ -79,6 +71,8 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) {
             ChangeLight(0.5f);
         }
+
+        
         
     }
     #endregion

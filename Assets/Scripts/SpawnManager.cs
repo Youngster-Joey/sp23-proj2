@@ -5,71 +5,51 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class SpawnManager : MonoBehaviour
 {
-   #region Editor Variables
-   public EnemySpawnInfo[] m_EnemyTypes;
-   #endregion
+   public GameObject wisp;
+   public GameObject shade;
+   public GameObject torch;
 
-   #region Non-Editor Variables
-   // look into coroutines
-   private float[] m_EnemySpawnTimers;
-   #endregion
+   public float shadeCap;
+   public float wispTimer;
+   public float torchTimer;
 
-   #region First Time Initialization and Set Up
-   private void Awake()
-   {
-      m_EnemySpawnTimers = new float[m_EnemyTypes.Length];
+   private float nextWisp;
+   private float nextTorch;
+   private int shadeCount;
 
-      for (int i = 0; i < m_EnemyTypes.Length; i++) {
-         m_EnemySpawnTimers[i] = m_EnemyTypes[i].FirstSpawnTime;
+   public void Start() {
+      nextWisp = wispTimer;
+      shadeCount = 0;
+   }
+
+   public void Update() {
+      nextWisp -= Time.deltaTime;
+      nextTorch -= Time.deltaTime;
+      shadeCap = shadeCap + Time.deltaTime * 0.1f;
+
+      if (nextWisp < 0) {
+         wispTimer = wispTimer * 0.95f;
+         nextWisp = wispTimer;
+         SpawnWisp();
+      }
+      
+      if (nextTorch < 0) {
+         torchTimer = torchTimer * 1.1f;
+         nextTorch = torchTimer;
+         Instantiate(torch, new Vector3(Random.Range(-15, 13), Random.Range(-6, 11), 0), Quaternion.identity);
+      }
+
+      if (shadeCount + 1 < shadeCap) {
+         SpawnShade();
       }
    }
-   #endregion
 
-   #region Main Updates
-   private void Update()
-   {
-      for (int i = 0; i < m_EnemyTypes.Length; i++) {
-         m_EnemySpawnTimers[i] -= Time.deltaTime;
-         if (m_EnemySpawnTimers[i] < 0) {
-            Instantiate(m_EnemyTypes[i].EnemyPrefab);
-            m_EnemySpawnTimers[i] = m_EnemyTypes[i].SpawnRate;
-
-            m_EnemyTypes[i].ChangeSpawnRate(m_EnemyTypes[i].SpawnRate * 1.1f);
-         }
-      }
+   public void SpawnWisp() {
+      Instantiate(wisp, new Vector3(Random.Range(-15, 13), Random.Range(-6, 11), 0), Quaternion.identity);
    }
-   #endregion
-}
-
-public struct EnemySpawnInfo
-{
-   #region Editor Variables
-   public GameObject m_EnemyPrefab;
-
-   public float m_FirstSpawnTime;
-
-   public float m_SpawnRate;
-   #endregion
-
-   #region Accessors and Mutators
-   public GameObject EnemyPrefab
-   {
-      get { return m_EnemyPrefab; }
+   
+   public void SpawnShade() {
+      shadeCount++;
+      Instantiate(shade, new Vector3(Random.Range(-15, 13), Random.Range(-6, 11), 0), Quaternion.identity);
    }
-
-   public float FirstSpawnTime
-   {
-      get { return m_FirstSpawnTime; }
-   }
-
-   public float SpawnRate
-   {
-      get { return m_SpawnRate; }
-   }
-
-   public void ChangeSpawnRate(float sr)
-   {
-      m_SpawnRate = sr;
-   }
-   #endregion
 }

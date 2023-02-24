@@ -52,7 +52,7 @@ public class Shade : MonoBehaviour
                 latestDirChangeTime = Time.time;
                 newMoveVector();
         }
-            Debug.Log("RandMove");
+            // Debug.Log("RandMove");
             RandMove();
         }
         
