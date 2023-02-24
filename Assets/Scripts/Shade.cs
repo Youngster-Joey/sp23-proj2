@@ -5,13 +5,13 @@ using UnityEngine;
 using Random=UnityEngine.Random;
 
 
-public class Wisp : MonoBehaviour
+public class Shade : MonoBehaviour
 {
      #region Movement_variables
     public float movespeed;
     private Vector2 movementDirection;
     private Vector2 movementPerSecond;
-    private bool playerDetected;
+    private static bool playerDetected;
     #endregion
 
     #region Physics_components
@@ -74,4 +74,25 @@ public class Wisp : MonoBehaviour
         Vector2 movementDirection = player.position - transform.position;
         ShadeRB.velocity = movementDirection.normalized * movespeed;
     }
+
+    public static void DetectedPlayer()
+    {
+        playerDetected = true;
+    }
+
+    public static void NotDetectedPlayer()
+    {
+        playerDetected = false;
+    }
+
+    #region CollisionFunctions
+    private void OnCollisionEnter2D(Collision2D c)
+    {
+
+        if (c.transform.gameObject.CompareTag("Player"))
+        {
+            c.transform.GetComponent<Player>().TakeDamage((int) attackAmount);
+        }
+    }
+    #endregion
 }

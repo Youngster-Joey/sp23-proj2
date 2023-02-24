@@ -5,7 +5,7 @@ using UnityEngine;
 using Random=UnityEngine.Random;
 
 
-public class Shade : MonoBehaviour
+public class Wisp : MonoBehaviour
 {
      #region Movement_variables
     public float movespeed;
@@ -74,4 +74,19 @@ public class Shade : MonoBehaviour
         Vector2 movementDirection = player.position - transform.position;
         WispRB.velocity = movementDirection.normalized * movespeed;
     }
+
+    #region CollisionFunctions
+    private void OnCollisionEnter2D(Collision2D c)
+    {
+        if (c.collider.gameObject.CompareTag("Light"))
+        {
+            playerDetected = true;
+        }
+
+        if (c.collider.gameObject.CompareTag("Player"))
+        {
+            c.transform.GetComponent<Player>().ChangeLight(-stealAmount);
+        }
+    }
+    #endregion
 }
