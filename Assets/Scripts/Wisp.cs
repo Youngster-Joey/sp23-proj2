@@ -36,10 +36,9 @@ public class Wisp : MonoBehaviour
     void Start() {
         movespeed = movespeed * Random.Range(1f, 2f);
         player = GameObject.Find("Player").transform;
-        Debug.Log(player);
 
         latestDirChangeTime = 0f;
-        lifeLength = Random.Range(2.0f, 9.0f);
+        lifeLength = Random.Range(5f, 10f);
         playerDetected = false;
 
         WispRB = GetComponent<Rigidbody2D>();
@@ -48,7 +47,7 @@ public class Wisp : MonoBehaviour
     void Update() {
         
         if (playerDetected) {
-            Debug.Log("RegMove");
+            // Debug.Log("RegMove");
             RegMove();
         }
         
@@ -62,6 +61,10 @@ public class Wisp : MonoBehaviour
             RandMove();
         }
         
+        lifeLength -= Time.deltaTime;
+        if (lifeLength < 0) {
+            Destroy(this.gameObject);
+        }
     }
 
 
@@ -97,7 +100,10 @@ public class Wisp : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D c) {
         if (c.transform.CompareTag("Player"))
         {
+            Debug.Log("YOOOO");
             c.transform.GetComponent<Player>().ChangeLight(-stealAmount);
+            
+            Destroy(this.gameObject);
         }
     }
     #endregion

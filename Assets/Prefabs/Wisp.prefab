@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movespeed: 2
-  stealAmount: 0
+  stealAmount: 9999
   latestDirChangeTime: 0
   dirChangeTime: 2
 --- !u!50 &5279759920806013860

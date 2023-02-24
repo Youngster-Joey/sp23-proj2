@@ -11,7 +11,8 @@ public class Shade : MonoBehaviour
     public float movespeed;
     private Vector2 movementDirection;
     private Vector2 movementPerSecond;
-    private static bool playerDetected;
+    public float movespeedRampTimer;
+    private float nextMovespeedRamp;
     #endregion
 
     #region Physics_components
@@ -19,12 +20,12 @@ public class Shade : MonoBehaviour
     #endregion
 
     #region Targeting_variables
-    public Transform player;
+    private GameObject playerObject;
+    private Transform player;
     #endregion
 
     #region Attack_variables
     public float attackAmount;
-    private float lifeLength;
     #endregion
 
     #region Random_variables
@@ -35,25 +36,34 @@ public class Shade : MonoBehaviour
 
     void Awake() {
         latestDirChangeTime = 0f;
-        lifeLength = Random.Range(2.0f, 9.0f);
-        playerDetected = false;
 
+        playerObject = GameObject.Find("Player");
+        player = playerObject.transform;
+
+        ShadeRB = GetComponent<Rigidbody2D>();
+
+        nextMovespeedRamp = movespeedRampTimer;
     }
 
     void Update() {
-        
-        if (playerDetected) {
-            Debug.Log("RegMove");
+                
+        if (player.GetComponent<Player>().lightRadius < 1) {
             RegMove();
         }
+
         else {
             if (Time.time - latestDirChangeTime > dirChangeTime){
                 Debug.Log("time shift thing");
                 latestDirChangeTime = Time.time;
                 newMoveVector();
         }
-            // Debug.Log("RandMove");
             RandMove();
+        }
+
+        nextMovespeedRamp -= Time.deltaTime;
+        if (nextMovespeedRamp < 0) {
+            movespeed += 0.1f;
+            nextMovespeedRamp = movespeedRampTimer;
         }
         
     }
@@ -73,16 +83,6 @@ public class Shade : MonoBehaviour
     private void RegMove() {
         Vector2 movementDirection = player.position - transform.position;
         ShadeRB.velocity = movementDirection.normalized * movespeed;
-    }
-
-    public static void DetectedPlayer()
-    {
-        playerDetected = true;
-    }
-
-    public static void NotDetectedPlayer()
-    {
-        playerDetected = false;
     }
 
     #region CollisionFunctions

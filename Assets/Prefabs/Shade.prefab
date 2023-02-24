@@ -116,8 +116,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1839f701d8434e47baf499c722f0abf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movespeed: 3
-  player: {fileID: 0}
+  movespeed: 4
+  movespeedRampTimer: 3
   attackAmount: 0
   latestDirChangeTime: 0
   dirChangeTime: 2
@@ -141,7 +141,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!95 &3718279925022742182
 Animator:
   serializedVersion: 5
